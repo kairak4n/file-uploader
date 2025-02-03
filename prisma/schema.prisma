@@ -19,3 +19,14 @@ model user {
   username String @unique
   password String
 }
+
+model file {
+  id        Int      @id @default(autoincrement())
+  filename  String
+  mimetype  String
+  size      Int
+  path      String
+  createdAt DateTime @default(now())
+  userId    Int
+  folderId  Int?
+}

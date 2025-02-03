@@ -3,18 +3,19 @@ import session from 'express-session';
 import path from 'node:path';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import { PrismaClient } from '@prisma/client';
+import prisma from './database/prismaClient'
 import authRouter from './auth/auth.router';
-import filesRouter from './files/files.router'
+import filesRouter from './entities/files/files.router'
 import passport from 'passport';
 import localStrategy from './auth/strategies/local'
 require('dotenv').config()
 
 const app = express()
-const prisma = new PrismaClient()
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
+app.use('/uploads', express.static('uploads'))
 
 app.use(session({
     cookie: { 
@@ -36,11 +37,9 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(localStrategy)
-
 passport.serializeUser((user: any, done) => {
     done(null, user.id)
 })
-
 passport.deserializeUser(async (id: number, done) => {
     try {
         const user = await prisma.user.findUnique({
