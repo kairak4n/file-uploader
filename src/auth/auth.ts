@@ -1,10 +1,7 @@
 import express from 'express'
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs'; 
-import passport from 'passport';
+import { authSignUpPost, authLoginPost, authSignUpGet, authLoginGet } from './authController';
 
 const router = express.Router();
-const prisma = new PrismaClient()
 
 router.get('/', (req, res) => {
     console.log(req.user)
@@ -13,36 +10,12 @@ router.get('/', (req, res) => {
     })
 })
     
-router.get('/login', (req, res) => {
-    res.render('login')
-})
+router.get('/login', authSignUpGet)
 
-router.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/',
-}))
+router.post('/login', authLoginPost)
 
-router.get('/sign-up', (req, res) => {
-    res.render('sign-up')
-})
+router.get('/sign-up', authLoginGet)
 
-router.post('/sign-up',async (req, res) => {
-    try {
-        const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(req.body.password, salt);
-        await prisma.user.create({
-            data: {
-                username: req.body.username,
-                password: hash,
-            }
-        })
-        res.redirect('/')
-    } catch (e) {
-        console.error(e)
-        res.status(500).send('internal')
-    } finally {
-        await prisma.$disconnect
-    }
-})
+router.post('/sign-up', authSignUpPost)
 
 export default router;
