@@ -4,7 +4,7 @@ import path from 'node:path';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import { PrismaClient } from '@prisma/client';
 import authRouter from './auth/auth.router';
-import fileRouter from './routes/file';
+import filesRouter from './files/files.router'
 import passport from 'passport';
 import localStrategy from './auth/strategies/local'
 require('dotenv').config()
@@ -55,6 +55,6 @@ passport.deserializeUser(async (id: number, done) => {
 })
 
 app.use(authRouter)
-app.use(fileRouter)
+app.use(filesRouter)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`))
