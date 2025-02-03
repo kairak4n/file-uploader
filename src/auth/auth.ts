@@ -2,13 +2,15 @@ import express from 'express'
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs'; 
 import passport from 'passport';
-import LocalStrategy from 'passport-local';
 
 const router = express.Router();
 const prisma = new PrismaClient()
 
 router.get('/', (req, res) => {
-    res.render('login')
+    console.log(req.user)
+    res.render('index', {
+        user: req.user,
+    })
 })
     
 router.get('/login', (req, res) => {

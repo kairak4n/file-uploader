@@ -3,11 +3,11 @@ import session from 'express-session';
 import path from 'node:path';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import { PrismaClient } from '@prisma/client';
-import authRouter from './routes/auth'
+import authRouter from './auth/auth';
+import fileRouter from './routes/file';
 import passport from 'passport';
-const LocalStrategy = require('passport-local').Strategy;
+import localStrategy from './auth/strategies/local'
 require('dotenv').config()
-import bcrypt from 'bcryptjs'
 
 const app = express()
 const prisma = new PrismaClient()
@@ -35,29 +35,7 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
-passport.use(
-    new LocalStrategy(async (username: string, password: string, done: any) => {
-        try{
-            const user = await prisma.user.findUnique({
-                where: {
-                    username
-                }
-            })
-            if (!user) {
-                return done(null, false, { message: "Username is incorrect" })
-            }
-            const match = bcrypt.compare(password, user.password)
-            if (!match) {
-                return done(null, false, { message: "Password is incorrect" })
-            }
-            return done(null, user)
-        } catch(e) {
-            return done(e)
-        } finally {
-            prisma.$disconnect()
-        }
-    })
-)
+passport.use(localStrategy)
 
 passport.serializeUser((user: any, done) => {
     done(null, user.id)
@@ -77,5 +55,6 @@ passport.deserializeUser(async (id: number, done) => {
 })
 
 app.use(authRouter)
+app.use(fileRouter)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`))

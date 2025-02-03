@@ -6,9 +6,13 @@
     <title>Document</title>
 </head>
 <body>
+    <% if (locals.user) { %>
+        <p>Welcome <%= user.username %></p>
+    <% } else { %>
     <form action="/login" method="get">
         <button>Log in</button>
     </form>
+    <% } %>
     
 </body>
 </html>
