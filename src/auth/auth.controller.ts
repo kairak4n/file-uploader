@@ -4,8 +4,8 @@ import passport from 'passport';
 
 const prisma = new PrismaClient()
 
-export function authSignUpGet(res: any) {
-    res.render('login')
+export function authSignUpGet(req: any, res: any) {
+    res.render('sign-up')
 }
 
 export async function authSignUpPost(req: any, res: any) {
@@ -27,13 +27,13 @@ export async function authSignUpPost(req: any, res: any) {
     }
 }
 
-export function authLoginGet(res: any) {
-    res.render('sign-up')
+export function authLoginGet(req: any, res: any) {
+    res.render('login')
 }
 
-export function authLoginPost() {
+export function authLoginPost(req: any, res: any) {
     passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/',
-    })
+    })(req, res)
 }

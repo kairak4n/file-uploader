@@ -10,11 +10,11 @@ router.get('/', (req, res) => {
     })
 })
     
-router.get('/login', authSignUpGet)
+router.get('/login', authLoginGet)
 
 router.post('/login', authLoginPost)
 
-router.get('/sign-up', authLoginGet)
+router.get('/sign-up', authSignUpGet)
 
 router.post('/sign-up', authSignUpPost)
 
