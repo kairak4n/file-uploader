@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer';
-import { isAuth } from '../auth/authMiddleware'
+import { isAuth } from '../auth/auth.middleware'
 const upload = multer({ dest: './uploads' })
 
 const router = express.Router()
