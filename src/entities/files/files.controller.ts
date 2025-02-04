@@ -16,8 +16,9 @@ export const filesUploadPost = [
     upload.single('file'),
     async (req: any, res: any) => {
         const file = req.file;
+        const filename = req.body.filename;
         await createFile(
-            file.filename,
+            filename,
             file.mimetype,
             file.size,
             file.path,

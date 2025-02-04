@@ -7,6 +7,7 @@ import prisma from './database/prismaClient'
 import authRouter from './auth/auth.router';
 import filesRouter from './entities/files/files.router'
 import userRouter from './entities/user/user.router'
+import folderRouter from './entities/folder/folder.router'
 import passport from 'passport';
 import localStrategy from './auth/strategies/local'
 require('dotenv').config()
@@ -57,5 +58,6 @@ passport.deserializeUser(async (id: number, done) => {
 app.use(authRouter)
 app.use(filesRouter)
 app.use("/user", userRouter)
+app.use(folderRouter)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`))
