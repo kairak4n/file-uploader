@@ -1,18 +1,15 @@
 import { isAuth } from "../../auth/auth.middleware";
-import prisma from "../../database/prismaClient"
+import { findUserById } from "./user.middleware";
 
 export const userFilesGet = [
     isAuth,
     async (req: any, res: any) => {
         const userId = parseInt(req.params.userId);
-        const user = await prisma.user.findUnique({
-            where: {
-                id: userId,
-            },
-            include: {
-                files: true,
-            }
-        })
-        res.render('viewFiles', { user })
+        try {
+            const user = await findUserById(userId)
+            res.render('viewFiles', { user })
+        } catch(err) {
+            res.status(500).send("internal")
+        }
     }
 ]
