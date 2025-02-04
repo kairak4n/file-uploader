@@ -8,6 +8,9 @@
 <body>
     <% if (locals.user) { %>
         <p>Welcome <%= user.username %></p>
+        <form action="/user/<%= locals.user.id %>/files" method="GET">
+            <button type="submit">View all files</button>
+        </form>
     <% } else { %>
     <form action="/login" method="get">
         <button>Log in</button>

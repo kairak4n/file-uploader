@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1><%= locals.user.username %>'s files:</h1>
+    <ul>
+        <% locals.user.files.forEach(file => { %>
+            <li>
+                <%= file.filename %>
+                    <form action="/<%= file.path %>" method="GET">
+                        <button type="submit">Download</button>
+                    </form>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
