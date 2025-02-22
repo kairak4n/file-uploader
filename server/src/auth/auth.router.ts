@@ -4,10 +4,7 @@ import { authSignUpPost, authLoginPost, authSignUpGet, authLoginGet } from './au
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    console.log(req.user)
-    res.render('index', {
-        user: req.user,
-    })
+    res.status(200).send('Hello world')
 })
     
 router.get('/login', authLoginGet)

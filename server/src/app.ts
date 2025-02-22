@@ -10,12 +10,15 @@ import userRouter from './entities/user/user.router'
 import folderRouter from './entities/folder/folder.router'
 import passport from 'passport';
 import localStrategy from './auth/strategies/local'
+import cors from 'cors';
 require('dotenv').config()
 
 const app = express()
+const corsOptions = {
+    origin: ["http://localhost:5173"],
+}
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use('/uploads', express.static('uploads'))
 
@@ -55,9 +58,17 @@ passport.deserializeUser(async (id: number, done) => {
     }
 })
 
-app.use(authRouter)
-app.use(filesRouter)
-app.use("/user", userRouter)
-app.use(folderRouter)
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../../client/build')));
+
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
+});
+
+// app.use(authRouter)
+// app.use(filesRouter)
+// app.use("/user", userRouter)
+// app.use(folderRouter)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`))
